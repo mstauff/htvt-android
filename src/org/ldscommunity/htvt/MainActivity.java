@@ -1,23 +1,71 @@
 package org.ldscommunity.htvt;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import android.support.v4.widget.DrawerLayout;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends Activity {
+    private static String[] NAV_PAGES = {"INDIVIDUALLIST","ASSIGN","RECORD","REPORT"};
+
     private HashMap<Long, String> members = new HashMap<Long, String>();
-    /**
-     * Called when the activity is first created.
-     */
+    private String[] navOptions;
+    private DrawerLayout drawerNav;
+    private ListView navList;
+    private FrameLayout pageFrame;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        navOptions = getResources().getStringArray(R.array.nav_options);
+        drawerNav = (DrawerLayout) findViewById(R.id.nav_drawer);
+        navList = (ListView) findViewById(R.id.nav_drawer_list);
+        pageFrame = (FrameLayout) findViewById(R.id.page_frame);
+
+        navList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_option, navOptions));
+        navList.setOnItemClickListener(new ListView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                setPageActivity(position);
+            }
+        });
+
         BuildMemberListWithOptions();
+    }
+
+    private void setPageActivity(int position){
+        pageFrame.removeAllViews();
+
+        Fragment fragment;
+        switch (position){
+            case 0:
+            default:
+                fragment = new IndividualListFragment();
+                break;
+            case 1:
+                fragment = new AssignFragment();
+                break;
+            case 2:
+                fragment = new RecordFragment();
+                break;
+            case 3:
+                fragment = new ReportFragment();
+                break;
+        }
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.page_frame, fragment).commit();
+
+        navList.setItemChecked(position, true);
+        setTitle(navOptions[position]);
+        drawerNav.closeDrawer(navList);
     }
 
     public HashMap<Long, String> HydrateMemberList() {
