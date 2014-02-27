@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +22,7 @@ public class MainActivity extends Activity {
     private DrawerLayout drawerNav;
     private ListView navList;
     private FrameLayout pageFrame;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,11 @@ public class MainActivity extends Activity {
         navList = (ListView) findViewById(R.id.nav_drawer_list);
         pageFrame = (FrameLayout) findViewById(R.id.page_frame);
 
+        drawerToggle = new ActionBarDrawerToggle(this, drawerNav, R.drawable.ic_launcher, R.string.openDrawer, R.string.closeDrawer);
+        drawerNav.setDrawerListener(drawerToggle);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
         navList.setAdapter(new ArrayAdapter<String>(this, R.layout.nav_option, navOptions));
         navList.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
@@ -39,6 +48,14 @@ public class MainActivity extends Activity {
         });
 
         BuildMemberListWithOptions();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(drawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setPageActivity(int position){

@@ -10,7 +10,8 @@
         android:focusableInTouchMode="true">
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                 android:id="@+id/page_frame">
+                 android:id="@+id/page_frame"
+                 android:background="@color/primary_background">
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                      android:id="@+id/mainTableLayout"
                      android:orientation="vertical"
@@ -23,5 +24,6 @@
               android:layout_height="match_parent"
               android:id="@+id/nav_drawer_list"
               android:layout_gravity="start"
-              android:choiceMode="singleChoice"/>
+              android:choiceMode="singleChoice"
+              android:background="@color/secondary_background"/>
         </android.support.v4.widget.DrawerLayout>
