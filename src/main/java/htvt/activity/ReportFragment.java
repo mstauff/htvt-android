@@ -1,4 +1,4 @@
-package org.ldscommunity.htvt;
+package main.java.htvt.activity;
 
 import android.app.Fragment;
 import android.os.Bundle;

@@ -1,15 +1,15 @@
-package org.ldscommunity.htvt;
+package main.java.htvt.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.view.MenuInflater;
+import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import android.support.v4.widget.DrawerLayout;
+import main.java.htvt.R;
 
 import java.util.HashMap;
 import java.util.Map;
