@@ -1,4 +1,4 @@
-package main.java.htvt.activity;
+package htvt;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,12 +9,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import htvt.activity.AssignFragment;
+import htvt.activity.IndividualListFragment;
+import htvt.activity.RecordFragment;
+import htvt.activity.ReportFragment;
+import htvt.api.MemberManager;
 import main.java.htvt.R;
+import roboguice.activity.RoboActivity;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends Activity {
+public class MainActivity extends RoboActivity {
     private static String[] NAV_PAGES = {"INDIVIDUALLIST","ASSIGN","RECORD","REPORT"};
 
     private HashMap<Long, String> members = new HashMap<Long, String>();
@@ -23,6 +30,9 @@ public class MainActivity extends Activity {
     private ListView navList;
     private FrameLayout pageFrame;
     private ActionBarDrawerToggle drawerToggle;
+
+    @Inject
+    MemberManager memberManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +108,7 @@ public class MainActivity extends Activity {
     }
 
     public void BuildMemberListWithOptions() {
+        //List<Member> memberList = memberManager.getWardList();
         HydrateMemberList();
         TableLayout l_layout = (TableLayout) findViewById(R.id.mainTableLayout);
         String[] spinnerOption = {"Not Recorded", "Yes", "No"};

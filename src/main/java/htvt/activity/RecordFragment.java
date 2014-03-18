@@ -1,14 +1,12 @@
-package main.java.htvt.activity;
+package htvt.activity;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import main.java.htvt.R;
 
-/**
- * Created by Adam on 2/25/14.
- */
 public class RecordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

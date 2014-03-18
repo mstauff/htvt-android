@@ -1,10 +1,11 @@
-package main.java.htvt.activity;
+package htvt.activity;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import main.java.htvt.R;
 
 public class IndividualListFragment extends Fragment {
     @Override
