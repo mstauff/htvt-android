@@ -1,5 +1,6 @@
 package htvt.api;
 
+import htvt.domain.Family;
 import htvt.domain.Member;
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
@@ -20,10 +21,10 @@ public class MemberManager {
     @Inject
     CwfNetworkUtil networkUtil;
 
-    public List<Member> getWardList() {
-        List<Member> wardList = new ArrayList<Member>();
+    public List<Family> getWardList() {
+        List<Family> wardList = new ArrayList<Family>();
         try {
-            String memberList = CwfNetworkUtil.executeGetJSONRequest(new HttpGet(member_list));
+            String memberList = networkUtil.executeGetJSONRequest(new HttpGet(member_list));
             wardList = JSONUtil.parseMemberList(new JSONArray(memberList));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

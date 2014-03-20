@@ -1,4 +1,4 @@
-package htvt;
+package htvt.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,12 +9,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import htvt.activity.AssignFragment;
-import htvt.activity.IndividualListFragment;
-import htvt.activity.RecordFragment;
-import htvt.activity.ReportFragment;
 import htvt.api.MemberManager;
 import main.java.htvt.R;
+import org.lds.mobile.util.TagUtil;
 import roboguice.activity.RoboActivity;
 
 import javax.inject.Inject;
@@ -22,6 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends RoboActivity {
+    public static final String DEFAULT_TAG_PREFIX = "workflow.";
+
+    public static String createTag(Class clazz) {
+        return TagUtil.createTag(DEFAULT_TAG_PREFIX, clazz);
+    }
     private static String[] NAV_PAGES = {"INDIVIDUALLIST","ASSIGN","RECORD","REPORT"};
 
     private HashMap<Long, String> members = new HashMap<Long, String>();
@@ -108,7 +110,6 @@ public class MainActivity extends RoboActivity {
     }
 
     public void BuildMemberListWithOptions() {
-        //List<Member> memberList = memberManager.getWardList();
         HydrateMemberList();
         TableLayout l_layout = (TableLayout) findViewById(R.id.mainTableLayout);
         String[] spinnerOption = {"Not Recorded", "Yes", "No"};

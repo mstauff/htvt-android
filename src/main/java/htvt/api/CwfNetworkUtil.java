@@ -31,7 +31,7 @@ public class CwfNetworkUtil {
     private static final String TAG = TagUtil.createTag("lds-cwf", CwfNetworkUtil.class);
 
     //private static HttpClient httpClient;
-    private AbstractHttpClient httpClient;
+    private static AbstractHttpClient httpClient;
 
     @Inject
     private SharedPreferences preferences;
@@ -66,9 +66,9 @@ public class CwfNetworkUtil {
         return httpClient;
     }
 
-    public static String executeGetJSONRequest(HttpGet getMethod) throws IOException {
+    public String executeGetJSONRequest(HttpGet getMethod) throws IOException {
         Log.i(TAG, "executeGetJSONRequest() getting from: " + getMethod.getURI().toString() );
-        String result = NetworkUtil.executeGetJSONRequest(NetworkUtil.createHttpClient(), getMethod);
+        String result = NetworkUtil.executeGetJSONRequest(getHttpClient(), getMethod);
         Log.i(TAG, "executeGetJSONRequest(). Response=" + result);
         return result;
     }

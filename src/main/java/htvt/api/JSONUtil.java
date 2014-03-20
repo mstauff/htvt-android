@@ -1,46 +1,62 @@
 package htvt.api;
 
+import htvt.domain.Family;
+import htvt.domain.Member;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import htvt.domain.Member;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JSONUtil {
-    public static final String MEMBER_FIRST = "firstName";
-    public static final String MEMBER_LAST = "lastName";
-    public static final String MEMBER_IND_ID = "individualId";
+    /*
+    "individualId": 321,
+      "formattedName": "AFPEight, Wife",
+      "surname": "AFPEight",
+      "givenName1": "Wife",
+      "priesthoodOffice": null,
+      "email": null,
+      "photoUrl": "img/no-pic.png",
+      "imageId": null,
+      "gender": "FEMALE",
+      "notes": null,
+      "birthdate": 0,
+      "phone": null
+     */
+    public static final String INDIVIDUAL_ID = "individualId";
+    public static final String FORMATTED_NAME = "formattedName";
+    public static final String SURNAME = "surname";
+    public static final String GIVEN_NAME = "givenName1";
+    public static final String PRIESTHOOD_OFFICE = "priesthoodOffice";
+    public static final String EMAIL = "email";
+    public static final String PHOTO_URL = "photoUrl";
+    public static final String IMAGE_ID = "imageId";
+    public static final String GENDER = "gender";
+    public static final String NOTES = "notes";
+    public static final String BIRTH_DATE = "birthdate";
+    public static final String PHONE = "phone";
 
-    public static final String POSITION_ID = "positionId";
-    public static final String POSITION_NAME = "positionName";
 
-    public static final String STATUS_NAME = "statusName";
-    public static final String STATUS_ORDER = "sortOrder";
-    public static final String STATUS_COMPLETE= "isComplete";
+    public static Family parseFamily(JSONObject json) throws JSONException {
+        Family family = new Family();
 
-    public static final String CALLING_IND_ID = "individualId";
-    public static final String CALLING_POS_ID = "positionId";
-    public static final String CALLING_STATUS_NAME = "statusName";
-
-    public static final String CALLING_OBJ = "calling";
-
-    public static Member parseMember( JSONObject json ) throws JSONException {
-        Member member = new Member();
-        member.setFirstName( json.getString( MEMBER_FIRST ) );
-        member.setLastName(json.getString(MEMBER_LAST));
-        member.setIndividualId(json.getLong(MEMBER_IND_ID));
-
-        return member;
-
+        return family;
     }
 
-    public static List<Member> parseMemberList( JSONArray jsonArray ) throws JSONException {
-        List<Member> memberList = new ArrayList<Member>( jsonArray.length() );
+    public static Member parseMember(JSONObject json) throws JSONException {
+        Member member = new Member(json.getLong(INDIVIDUAL_ID), json.getString(FORMATTED_NAME), json.getString(SURNAME),
+                json.getString(GIVEN_NAME), json.getString(PRIESTHOOD_OFFICE), json.getString(EMAIL),
+                json.getString(PHOTO_URL), json.getString(IMAGE_ID), json.getString(GENDER),
+                json.getString(NOTES), json.getString(BIRTH_DATE), json.getString(PHONE));
+        return member;
+    }
+
+    public static List<Family> parseMemberList( JSONArray jsonArray ) throws JSONException {
+        List<Family> memberList = new ArrayList<Family>( jsonArray.length() );
         final int numJsonObjects = jsonArray.length();
         for (int i = 0; i < numJsonObjects; i++) {
-            memberList.add( parseMember( jsonArray.getJSONObject(i) ) );
+            memberList.add( parseFamily(jsonArray.getJSONObject(i)) );
         }
 
         return memberList;
