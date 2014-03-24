@@ -130,59 +130,55 @@ public class HTVTDB {
     }
 
     static class DatabaseHelper extends SQLiteOpenHelper {
-
+        private static final String DATABASE_NAME = "HTVT.db";
+        private static final int DATABASE_VERSION = 1;
         private SQLiteDatabase db;
-        DatabaseHelper(Context context) {
 
-            /* Calls the super constructor, requesting the default cursor factory. */
+        DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
             db = super.getWritableDatabase();
         }
 
-        /**
-         * Creates the underlying database with table name and column names taken from the
-         * NotePad class.
-         */
         @Override
-        public void onCreate(SQLiteDatabase db) {
-            // todo - setup INDEXES
-            this.db = db;
-            db.execSQL( MemberBaseRecord.CREATE_SQL );
-            db.execSQL("PRAGMA foreign_keys = ON;");
+        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+            db = sqLiteDatabase;
+
+            db.execSQL( MemberBaseRecord.CREATE_SQL);
+            db.execSQL( FamilyBaseRecord.CREATE_SQL );
+            db.execSQL( ChildBaseRecord.CREATE_SQL );
+            db.execSQL( TagBaseRecord.CREATE_SQL );
+
+            db.execSQL( DistrictBaseRecord.CREATE_SQL );
+            db.execSQL( CompanionshipBaseRecord.CREATE_SQL );
+            db.execSQL( AssignmentBaseRecord.CREATE_SQL );
+            db.execSQL( VisitBaseRecord.CREATE_SQL );
+            db.execSQL( TagBaseRecord.CREATE_SQL );
         }
 
         public SQLiteDatabase getDb() {
-            if (db == null || !db.isOpen()) {
+            if(db == null || !db.isOpen()) {
                 db = this.getWritableDatabase();
             }
             return db;
         }
 
         public void close() {
-            if( db != null && db.isOpen() ) {
+            if( db != null && db.isOpen()) {
                 db.close();
             }
         }
 
         @Override
-        public void onOpen(SQLiteDatabase db) {
-            super.onOpen(db);
-            if (!db.isReadOnly()) {
-	            /* Enable foreign key constraints */
+        public void onOpen(SQLiteDatabase sqLiteDatabase) {
+            super.onOpen(sqLiteDatabase);
+            if(!db.isReadOnly()) {
                 db.execSQL("PRAGMA foreign_keys=ON;");
             }
         }
 
-        /**
-         *
-         * Demonstrates that the provider must consider what happens when the
-         * underlying datastore is changed. In this sample, the database is upgraded the database
-         * by destroying the existing data.
-         * A real application should upgrade the database in place.
-         */
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            // for now - do nothing
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+
         }
     }
 }

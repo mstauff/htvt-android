@@ -5,6 +5,6 @@ import android.database.Cursor;
 
 public interface BaseRecord {
     public ContentValues getContentValues();
-      public void setContent(ContentValues values);
-      public void setContent(Cursor cursor);
+    public void setContent(ContentValues values);
+    public void setContent(Cursor cursor);
 }
