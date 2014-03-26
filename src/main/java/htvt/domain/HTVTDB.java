@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,8 @@ public class HTVTDB {
 
     private DatabaseHelper dbHelper;
 
-    @Inject
+    public HTVTDB() {}
+
     public HTVTDB(Context context) {
         dbHelper = new DatabaseHelper( context );
     }

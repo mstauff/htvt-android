@@ -9,14 +9,20 @@ public class FamilyBaseRecord implements BaseRecord {
     public static final String SPOUSE_ID = "spouse_id";
     public static final String FORMATTED_COUPLE_NAME = "formatted_couple_name";
     public static final String PHONE = "phone";
-    public static final String HOME_ADDRESS = "home_address";
+    public static final String STREET = "streetAddress";
+    public static final String CITY = "city";
+    public static final String STATE = "state";
+    public static final String POSTAL = "postal";
     public static final String EMAIL = "email";
 
     private long headOfHouseId = 0;
     private long spouseId = 0;
     private String formattedCoupleName = "";
     private String phone = "";
-    private String homeAddress = "";
+    private String street = "";
+    private String city = "";
+    private String state = "";
+    private String postal = "";
     private String email = "";
 
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
@@ -24,7 +30,10 @@ public class FamilyBaseRecord implements BaseRecord {
             + SPOUSE_ID + " INTEGER, "
             + FORMATTED_COUPLE_NAME + " STRING, "
             + PHONE + " STRING, "
-            + HOME_ADDRESS + " STRING, "
+            + STREET + " STRING, "
+            + CITY + " STRING, "
+            + STATE + " STRING, "
+            + POSTAL + " STRING, "
             + EMAIL + " STRING, "
             + "FOREIGN KEY(" + HEAD_OF_HOUSE_ID + ") REFERENCES "
             + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.INDIVIDUAL_ID + "), "
@@ -33,7 +42,7 @@ public class FamilyBaseRecord implements BaseRecord {
             + ");";
 
     static final String[] ALL_KEYS = new String[] { HEAD_OF_HOUSE_ID, SPOUSE_ID,
-            FORMATTED_COUPLE_NAME, PHONE, HOME_ADDRESS, EMAIL};
+            FORMATTED_COUPLE_NAME, PHONE, STREET, CITY, STATE, POSTAL, EMAIL};
 
     public String[] getAllKeys() {
         return ALL_KEYS.clone();
@@ -45,7 +54,10 @@ public class FamilyBaseRecord implements BaseRecord {
         values.put(SPOUSE_ID, spouseId);
         values.put(FORMATTED_COUPLE_NAME, formattedCoupleName);
         values.put(PHONE, phone);
-        values.put(HOME_ADDRESS, homeAddress);
+        values.put(STREET, street);
+        values.put(CITY, city);
+        values.put(STATE, state);
+        values.put(POSTAL, postal);
         values.put(EMAIL, email);
         return values;
     }
@@ -55,7 +67,10 @@ public class FamilyBaseRecord implements BaseRecord {
         spouseId = values.getAsLong(SPOUSE_ID);
         formattedCoupleName = values.getAsString(FORMATTED_COUPLE_NAME);
         phone = values.getAsString(PHONE);
-        homeAddress = values.getAsString(HOME_ADDRESS);
+        street = values.getAsString(STREET);
+        city = values.getAsString(CITY);
+        state = values.getAsString(STATE);
+        postal = values.getAsString(POSTAL);
         email = values.getAsString(EMAIL);
     }
 
@@ -64,7 +79,10 @@ public class FamilyBaseRecord implements BaseRecord {
         spouseId = cursor.getInt(cursor.getColumnIndex(SPOUSE_ID));
         formattedCoupleName = cursor.getString(cursor.getColumnIndex(FORMATTED_COUPLE_NAME));
         phone = cursor.getString(cursor.getColumnIndex(PHONE));
-        homeAddress = cursor.getString(cursor.getColumnIndex(HOME_ADDRESS));
+        street = cursor.getString(cursor.getColumnIndex(STREET));
+        city = cursor.getString(cursor.getColumnIndex(CITY));
+        state = cursor.getString(cursor.getColumnIndex(STATE));
+        postal = cursor.getString(cursor.getColumnIndex(POSTAL));
         email = cursor.getString(cursor.getColumnIndex(EMAIL));
     }
 
@@ -96,11 +114,32 @@ public class FamilyBaseRecord implements BaseRecord {
         this.phone = phone;
     }
 
-    public String getHomeAddress() {
-        return homeAddress;
+    public String getStreet() {
+        return street;
     }
-    public void setHomeAddress(String homeAddress) {
-        this.homeAddress = homeAddress;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPostal() {
+        return postal;
+    }
+    public void setPostal(String postal) {
+        this.postal = postal;
     }
 
     public String getEmail() {
