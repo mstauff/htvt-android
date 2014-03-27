@@ -2,6 +2,7 @@ package htvt.api;
 
 import htvt.domain.Family;
 import htvt.domain.Member;
+import htvt.domain.NetworkConfiguration;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,54 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONUtil {
-    /*
-    [
-        {
-            "headOfHouse": {
-                "individualId": 111,
-                "formattedName": "Jones, Joseph",
-                "surname": "Jones",
-                "givenName1": "Joseph",
-                "priesthoodOffice": null,
-                "email": null,
-                "photoUrl": "img/no-pic.png",
-                "imageId": null,
-                "gender": "MALE",
-                "notes": null,
-                "birthdate": 0,
-                "phone": null
-            },
-            "spouse": null,
-            "formattedCoupleName": "Jones, Joseph",
-            "children":
-            [
-                {
-                    "individualId": 131,
-                    "formattedName": "Jones, Petala",
-                    "surname": "Jones",
-                    "givenName1": "Petala",
-                    "priesthoodOffice": null,
-                    "email": null,
-                    "photoUrl": "img/no-pic.png",
-                    "imageId": null,
-                    "gender": "FEMALE",
-                    "notes": null,
-                    "birthdate": 0,
-                    "phone": null
-                }
-            ],
-            "phone": null,
-            "address":
-            {
-                "streetAddress": "123 Any Street",
-                "city": "City",
-                "state": "UT",
-                "postal": "88888"
-            },
-            "emailAddress": null
-        }
-    ]
-    */
+
     public static final String INDIVIDUAL_ID = "individualId";
     public static final String FORMATTED_COUPLE_NAME = "formattedCoupleName";
     public static final String FORMATTED_NAME = "formattedName";
@@ -155,5 +109,14 @@ public class JSONUtil {
         }
 
         return memberList;
+    }
+
+    public static NetworkConfiguration parseNetworkConfiguration(JSONObject jsonObject) throws JSONException {
+        JSONObject json = jsonObject.getJSONObject("urls");
+        return new NetworkConfiguration(json.getString("login"), json.getString("logout"),
+                json.getString("current_user"), json.getString("member_list"), json.getString("htvt_districts"),
+                json.getString("district_create"), json.getString("district_update"), json.getString("district_delete"),
+                json.getString("comp_create"), json.getString("comp_delete"), json.getString("visit_record"),
+                json.getString("visit_delete"), json.getString("latest_visits"));
     }
 }

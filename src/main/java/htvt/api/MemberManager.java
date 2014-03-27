@@ -1,7 +1,7 @@
 package htvt.api;
 
 import htvt.domain.Family;
-import htvt.domain.Member;
+import htvt.domain.NetworkConfiguration;
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,9 +14,6 @@ import java.util.List;
 
 @Singleton
 public class MemberManager {
-    public static final String ROOT = "http://htvt-ldscd.rhcloud.com/htvt/services/v1";
-    public static final String current_user = ROOT + "/user";
-    public static final String member_list = ROOT + "/@/members/";
 
     @Inject
     CwfNetworkUtil networkUtil;
@@ -24,7 +21,8 @@ public class MemberManager {
     public List<Family> getWardList() {
         List<Family> wardList = new ArrayList<Family>();
         try {
-            String memberList = networkUtil.executeGetJSONRequest(new HttpGet(member_list));
+            String memberList = networkUtil.executeGetJSONRequest(
+                    new HttpGet(networkUtil.getNetworkConfiguration().urlsMap.get(NetworkConfiguration.MEMBER_LIST).replace("%", "")));
             wardList = JSONUtil.parseMemberList(new JSONArray(memberList));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

@@ -2,6 +2,7 @@ package htvt.api;
 
 import android.content.SharedPreferences;
 import android.util.Log;
+import htvt.domain.NetworkConfiguration;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -12,6 +13,8 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.AbstractHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.lds.mobile.util.NetworkUtil;
 import org.lds.mobile.util.TagUtil;
 
@@ -27,7 +30,6 @@ import java.io.InputStreamReader;
  */
 @Singleton
 public class CwfNetworkUtil {
-
     private static final String TAG = TagUtil.createTag("lds-cwf", CwfNetworkUtil.class);
 
     //private static HttpClient httpClient;
@@ -64,6 +66,18 @@ public class CwfNetworkUtil {
         }
 
         return httpClient;
+    }
+
+    public NetworkConfiguration getNetworkConfiguration() throws IOException {
+        NetworkConfiguration networkConfiguration = null;
+        String netConfig = executeGetJSONRequest(new HttpGet(config));
+        try {
+            JSONObject jsonObject = new JSONObject(netConfig);
+            networkConfiguration = JSONUtil.parseNetworkConfiguration(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return networkConfiguration;
     }
 
     public String executeGetJSONRequest(HttpGet getMethod) throws IOException {
