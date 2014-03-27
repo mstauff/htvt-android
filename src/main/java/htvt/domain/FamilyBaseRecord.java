@@ -5,6 +5,8 @@ import android.database.Cursor;
 
 public class FamilyBaseRecord implements BaseRecord {
     public static final String TABLE_NAME = "family";
+    public static final String ID = "id";
+    public static final String UNIT_ID = "unit_id";
     public static final String HEAD_OF_HOUSE_ID = "head_of_house_id";
     public static final String SPOUSE_ID = "spouse_id";
     public static final String FORMATTED_COUPLE_NAME = "formatted_couple_name";
@@ -15,6 +17,8 @@ public class FamilyBaseRecord implements BaseRecord {
     public static final String POSTAL = "postal";
     public static final String EMAIL = "email";
 
+    private long id = 0;
+    private long unitId = 0;
     private long headOfHouseId = 0;
     private long spouseId = 0;
     private String formattedCoupleName = "";
@@ -26,7 +30,9 @@ public class FamilyBaseRecord implements BaseRecord {
     private String email = "";
 
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
-            + HEAD_OF_HOUSE_ID + " INTEGER PRIMARY KEY, "
+            + ID + " INTEGER PRIMARY KEY, "
+            + UNIT_ID + " INTEGER, "
+            + HEAD_OF_HOUSE_ID + " INTEGER, "
             + SPOUSE_ID + " INTEGER, "
             + FORMATTED_COUPLE_NAME + " STRING, "
             + PHONE + " STRING, "
@@ -36,12 +42,12 @@ public class FamilyBaseRecord implements BaseRecord {
             + POSTAL + " STRING, "
             + EMAIL + " STRING, "
             + "FOREIGN KEY(" + HEAD_OF_HOUSE_ID + ") REFERENCES "
-            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.INDIVIDUAL_ID + "), "
+            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.ID + "), "
             + "FOREIGN KEY(" + SPOUSE_ID + ") REFERENCES "
-            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.INDIVIDUAL_ID + ")"
+            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.ID + ")"
             + ");";
 
-    static final String[] ALL_KEYS = new String[] { HEAD_OF_HOUSE_ID, SPOUSE_ID,
+    static final String[] ALL_KEYS = new String[] { ID, UNIT_ID, HEAD_OF_HOUSE_ID, SPOUSE_ID,
             FORMATTED_COUPLE_NAME, PHONE, STREET, CITY, STATE, POSTAL, EMAIL};
 
     public String[] getAllKeys() {
@@ -50,6 +56,8 @@ public class FamilyBaseRecord implements BaseRecord {
 
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
+        values.put(ID, id);
+        values.put(UNIT_ID, unitId);
         values.put(HEAD_OF_HOUSE_ID, headOfHouseId);
         values.put(SPOUSE_ID, spouseId);
         values.put(FORMATTED_COUPLE_NAME, formattedCoupleName);
@@ -63,6 +71,8 @@ public class FamilyBaseRecord implements BaseRecord {
     }
 
     public void setContent(ContentValues values) {
+        id = values.getAsLong(ID);
+        unitId = values.getAsLong(UNIT_ID);
         headOfHouseId = values.getAsLong(HEAD_OF_HOUSE_ID);
         spouseId = values.getAsLong(SPOUSE_ID);
         formattedCoupleName = values.getAsString(FORMATTED_COUPLE_NAME);
@@ -75,6 +85,8 @@ public class FamilyBaseRecord implements BaseRecord {
     }
 
     public void setContent(Cursor cursor) {
+        id = cursor.getLong(cursor.getColumnIndex(ID));
+        unitId = cursor.getLong(cursor.getColumnIndex(UNIT_ID));
         headOfHouseId = cursor.getInt(cursor.getColumnIndex(HEAD_OF_HOUSE_ID));
         spouseId = cursor.getInt(cursor.getColumnIndex(SPOUSE_ID));
         formattedCoupleName = cursor.getString(cursor.getColumnIndex(FORMATTED_COUPLE_NAME));
@@ -85,6 +97,12 @@ public class FamilyBaseRecord implements BaseRecord {
         postal = cursor.getString(cursor.getColumnIndex(POSTAL));
         email = cursor.getString(cursor.getColumnIndex(EMAIL));
     }
+
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
+
+    public long getUnitId() { return unitId; }
+    public void setUnitId(long unitId) { this.unitId = unitId; }
 
     public long getHeadOfHouseId() {
         return headOfHouseId;

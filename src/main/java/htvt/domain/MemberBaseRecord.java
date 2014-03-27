@@ -6,6 +6,7 @@ import android.database.Cursor;
 public class MemberBaseRecord implements BaseRecord {
     public static final String TABLE_NAME = "member";
     public static final String DEFAULT_SORT_ORDER = "last_name DESC";
+    public static final String ID = "id";
     public static final String INDIVIDUAL_ID = "individual_id";
     public static final String FORMATTED_NAME = "formatted_name";
     public static final String FIRST_NAME = "first_name";
@@ -17,6 +18,7 @@ public class MemberBaseRecord implements BaseRecord {
     public static final String PHONE = "phone";
     public static final String ISADULT = "is_adult";
 
+    private long id = 0;
     private long individualId = 0;
     private String formattedName = "";
     private String firstName = "";
@@ -29,7 +31,8 @@ public class MemberBaseRecord implements BaseRecord {
     private long isAdult = 0;
 
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
-            + INDIVIDUAL_ID + " INTEGER PRIMARY KEY, "
+            + ID + " INTEGER PRIMARY KEY, "
+            + INDIVIDUAL_ID + " INTEGER, "
             + FORMATTED_NAME + " TEXT, "
             + FIRST_NAME + " TEXT, "
             + LAST_NAME + " TEXT,"
@@ -41,7 +44,7 @@ public class MemberBaseRecord implements BaseRecord {
             + ISADULT + " INTEGER"
             + ");";
 
-    static final String[] ALL_KEYS = new String[] { INDIVIDUAL_ID, FORMATTED_NAME, FIRST_NAME, LAST_NAME,
+    static final String[] ALL_KEYS = new String[] { ID, INDIVIDUAL_ID, FORMATTED_NAME, FIRST_NAME, LAST_NAME,
             PRIESTHOOD_OFFICE, EMAIL, GENDER, PHOTO_URL, PHONE, ISADULT };
 
     public String[] getAllKeys() {
@@ -50,6 +53,7 @@ public class MemberBaseRecord implements BaseRecord {
 
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
+        values.put(ID, id);
         values.put(INDIVIDUAL_ID, individualId);
         values.put(FORMATTED_NAME, formattedName);
         values.put(FIRST_NAME, firstName);
@@ -64,6 +68,7 @@ public class MemberBaseRecord implements BaseRecord {
     }
 
     public void setContent(ContentValues values) {
+        id = values.getAsLong(ID);
         individualId = values.getAsLong(INDIVIDUAL_ID);
         formattedName = values.getAsString(FORMATTED_NAME);
         firstName = values.getAsString(FIRST_NAME);
@@ -77,6 +82,7 @@ public class MemberBaseRecord implements BaseRecord {
     }
 
     public void setContent(Cursor cursor) {
+        id = cursor.getLong(cursor.getColumnIndex(ID));
         individualId = cursor.getLong(cursor.getColumnIndex(INDIVIDUAL_ID));
         formattedName = cursor.getString(cursor.getColumnIndex(FORMATTED_NAME));
         firstName = cursor.getString(cursor.getColumnIndex(FIRST_NAME));
@@ -88,6 +94,9 @@ public class MemberBaseRecord implements BaseRecord {
         phone = cursor.getString(cursor.getColumnIndex(PHONE));
         isAdult = cursor.getLong(cursor.getColumnIndex(ISADULT));
     }
+
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     public long getIndividualId() {
         return individualId;

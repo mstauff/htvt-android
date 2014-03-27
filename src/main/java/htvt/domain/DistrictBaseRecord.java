@@ -20,6 +20,8 @@ public class DistrictBaseRecord implements BaseRecord {
             + NAME + " STRING, "
             + AUXILIARY_ID + " INTEGER, "
             + DISTRICT_LEADER_ID + " INTEGER"
+            + "FOREIGN KEY(" + AUXILIARY_ID + ") REFERENCES "
+            + AuxiliaryBaseRecord.TABLE_NAME + "(" + AuxiliaryBaseRecord.AUXILIARY_ID + ") ON DELETE CASCADE"
             + ");";
 
     static final String[] ALL_KEYS = new String[] { DISTRICT_ID, NAME, AUXILIARY_ID, DISTRICT_LEADER_ID };

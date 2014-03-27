@@ -148,6 +148,7 @@ public class HTVTDB {
             db.execSQL( ChildBaseRecord.CREATE_SQL );
             db.execSQL( TagBaseRecord.CREATE_SQL );
 
+            db.execSQL( AuxiliaryBaseRecord.CREATE_SQL );
             db.execSQL( DistrictBaseRecord.CREATE_SQL );
             db.execSQL( CompanionshipBaseRecord.CREATE_SQL );
             db.execSQL( AssignmentBaseRecord.CREATE_SQL );
