@@ -7,8 +7,8 @@ public class FamilyBaseRecord implements BaseRecord {
     public static final String TABLE_NAME = "family";
     public static final String ID = "id";
     public static final String UNIT_ID = "unit_id";
-    public static final String HEAD_OF_HOUSE_ID = "head_of_house_id";
-    public static final String SPOUSE_ID = "spouse_id";
+    public static final String FATHER_ID = "father_id";
+    public static final String MOTHER_ID = "mother_id";
     public static final String FORMATTED_COUPLE_NAME = "formatted_couple_name";
     public static final String PHONE = "phone";
     public static final String STREET = "streetAddress";
@@ -19,8 +19,8 @@ public class FamilyBaseRecord implements BaseRecord {
 
     private long id = 0;
     private long unitId = 0;
-    private long headOfHouseId = 0;
-    private long spouseId = 0;
+    private Long fatherId = null;
+    private Long motherId = null;
     private String formattedCoupleName = "";
     private String phone = "";
     private String street = "";
@@ -32,8 +32,8 @@ public class FamilyBaseRecord implements BaseRecord {
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
             + ID + " INTEGER PRIMARY KEY, "
             + UNIT_ID + " INTEGER, "
-            + HEAD_OF_HOUSE_ID + " INTEGER, "
-            + SPOUSE_ID + " INTEGER, "
+            + FATHER_ID + " INTEGER, "
+            + MOTHER_ID + " INTEGER, "
             + FORMATTED_COUPLE_NAME + " STRING, "
             + PHONE + " STRING, "
             + STREET + " STRING, "
@@ -41,13 +41,13 @@ public class FamilyBaseRecord implements BaseRecord {
             + STATE + " STRING, "
             + POSTAL + " STRING, "
             + EMAIL + " STRING, "
-            + "FOREIGN KEY(" + HEAD_OF_HOUSE_ID + ") REFERENCES "
-            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.ID + "), "
-            + "FOREIGN KEY(" + SPOUSE_ID + ") REFERENCES "
-            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.ID + ")"
+            + "FOREIGN KEY(" + FATHER_ID + ") REFERENCES "
+            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.ID + ") ON DELETE CASCADE, "
+            + "FOREIGN KEY(" + MOTHER_ID + ") REFERENCES "
+            + MemberBaseRecord.TABLE_NAME + "(" + MemberBaseRecord.ID + ") ON DELETE CASCADE"
             + ");";
 
-    static final String[] ALL_KEYS = new String[] { ID, UNIT_ID, HEAD_OF_HOUSE_ID, SPOUSE_ID,
+    static final String[] ALL_KEYS = new String[] { ID, UNIT_ID, FATHER_ID, MOTHER_ID,
             FORMATTED_COUPLE_NAME, PHONE, STREET, CITY, STATE, POSTAL, EMAIL};
 
     public String[] getAllKeys() {
@@ -58,8 +58,8 @@ public class FamilyBaseRecord implements BaseRecord {
         ContentValues values = new ContentValues();
         values.put(ID, id);
         values.put(UNIT_ID, unitId);
-        values.put(HEAD_OF_HOUSE_ID, headOfHouseId);
-        values.put(SPOUSE_ID, spouseId);
+        values.put(FATHER_ID, fatherId);
+        values.put(MOTHER_ID, motherId);
         values.put(FORMATTED_COUPLE_NAME, formattedCoupleName);
         values.put(PHONE, phone);
         values.put(STREET, street);
@@ -73,8 +73,8 @@ public class FamilyBaseRecord implements BaseRecord {
     public void setContent(ContentValues values) {
         id = values.getAsLong(ID);
         unitId = values.getAsLong(UNIT_ID);
-        headOfHouseId = values.getAsLong(HEAD_OF_HOUSE_ID);
-        spouseId = values.getAsLong(SPOUSE_ID);
+        fatherId = values.getAsLong(FATHER_ID);
+        motherId = values.getAsLong(MOTHER_ID);
         formattedCoupleName = values.getAsString(FORMATTED_COUPLE_NAME);
         phone = values.getAsString(PHONE);
         street = values.getAsString(STREET);
@@ -87,8 +87,8 @@ public class FamilyBaseRecord implements BaseRecord {
     public void setContent(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndex(ID));
         unitId = cursor.getLong(cursor.getColumnIndex(UNIT_ID));
-        headOfHouseId = cursor.getInt(cursor.getColumnIndex(HEAD_OF_HOUSE_ID));
-        spouseId = cursor.getInt(cursor.getColumnIndex(SPOUSE_ID));
+        fatherId = cursor.getLong(cursor.getColumnIndex(FATHER_ID));
+        motherId = cursor.getLong(cursor.getColumnIndex(MOTHER_ID));
         formattedCoupleName = cursor.getString(cursor.getColumnIndex(FORMATTED_COUPLE_NAME));
         phone = cursor.getString(cursor.getColumnIndex(PHONE));
         street = cursor.getString(cursor.getColumnIndex(STREET));
@@ -104,18 +104,18 @@ public class FamilyBaseRecord implements BaseRecord {
     public long getUnitId() { return unitId; }
     public void setUnitId(long unitId) { this.unitId = unitId; }
 
-    public long getHeadOfHouseId() {
-        return headOfHouseId;
+    public long getFatherId() {
+        return fatherId;
     }
-    public void setHeadOfHouseId(long headOfHouseId) {
-        this.headOfHouseId = headOfHouseId;
+    public void setFatherId(long fatherId) {
+        this.fatherId = fatherId;
     }
 
-    public long getSpouseId() {
-        return spouseId;
+    public long getMotherId() {
+        return motherId;
     }
-    public void setSpouseId(long spouseId) {
-        this.spouseId = spouseId;
+    public void setMotherId(long motherId) {
+        this.motherId = motherId;
     }
 
     public String getFormattedCoupleName() {

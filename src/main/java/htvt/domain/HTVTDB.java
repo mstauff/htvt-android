@@ -6,10 +6,13 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import com.google.inject.Inject;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Singleton
 public class HTVTDB {
@@ -28,8 +31,7 @@ public class HTVTDB {
 
     private DatabaseHelper dbHelper;
 
-    public HTVTDB() {}
-
+    @Inject
     public HTVTDB(Context context) {
         dbHelper = new DatabaseHelper( context );
     }
@@ -37,12 +39,80 @@ public class HTVTDB {
     /*
      * /wardlist
      */
-    public List<Member> getWardList() {
-        return getData( Member.TABLE_NAME, Member.class );
+    public List<Family> getWardList() {
+        List<Member> members = getData(Member.TABLE_NAME, Member.class);
+        Map<Long, Member> memberMap = new HashMap<Long, Member>(members.size());
+        for(Member member: members) {
+            memberMap.put(member.getId(), member);
+        }
+
+        List<Family> families = getData(Family.TABLE_NAME, Family.class);
+        Map<Long, Family> familyMap = new HashMap<Long, Family>();
+        for(Family family: families) {
+            Member parent = memberMap.get(family.getFatherId());
+            if(parent != null) {
+                parent.setFamily(family);
+                family.setFather(parent);
+            }
+            parent = memberMap.get(family.getMotherId());
+            if(parent != null) {
+                parent.setFamily(family);
+                family.setMother(parent);
+            }
+            familyMap.put(family.getId(), family);
+        }
+
+        List<ChildBaseRecord> childRecords = getData(ChildBaseRecord.TABLE_NAME, ChildBaseRecord.class);
+        for(ChildBaseRecord childRecord: childRecords) {
+            Member child = memberMap.get(childRecord.getMemberId());
+            Family family = familyMap.get(childRecord.getFamilyId());
+            child.setFamily(family);
+            family.addChild(child);
+        }
+
+        return families;
     }
 
     public void updateWardList(List<Family> families) {
-        //updateData( Family.TABLE_NAME, families );
+        long memberIdCounter = 1;
+        long familyIdCounter = 1;
+        List<Member> members = new ArrayList<Member>();
+        List<ChildBaseRecord> childRecords = new ArrayList<ChildBaseRecord>();
+        for(Family family: families) {
+            family.setId(familyIdCounter++);
+            Member parent = family.getFather();
+            if(parent != null) {
+                parent.setId(memberIdCounter++);
+                family.setFatherId(parent.getId());
+                members.add(parent);
+            }
+            parent = family.getMother();
+            if(parent != null) {
+                parent.setId(memberIdCounter++);
+                family.setMotherId(parent.getId());
+                members.add(parent);
+            }
+            for(Member child: family.getChildren()) {
+                child.setId(memberIdCounter++);
+                ChildBaseRecord childRecord = new ChildBaseRecord();
+                childRecord.setMemberId(child.getId());
+                childRecord.setFamilyId(family.getId());
+                childRecords.add(childRecord);
+                members.add(child);
+            }
+        }
+        updateData(Member.TABLE_NAME, members);
+        updateData(Family.TABLE_NAME, families);
+        updateData(ChildBaseRecord.TABLE_NAME, childRecords);
+    }
+
+    // Districts
+    public List<Auxiliary> getAssignmentInfo() {
+        return new ArrayList<Auxiliary>();
+    }
+
+    public void updateDistricts(List<Auxiliary> auxiliaries) {
+
     }
 
     // generic/helper methods
@@ -77,7 +147,13 @@ public class HTVTDB {
 
             for( BaseRecord dataRow : data ) {
 //                insertHelper.insert( dataRow.getContentValues() );
-                db.insert( tableName, null, dataRow.getContentValues() );
+                if(tableName == Family.TABLE_NAME){
+                    Log.i(TAG,"Inserting family row");
+                }
+                db.insert(tableName, null, dataRow.getContentValues());
+                if(tableName == Family.TABLE_NAME){
+                    Log.i(TAG,"Finished family row");
+                }
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -137,6 +213,7 @@ public class HTVTDB {
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
             db = super.getWritableDatabase();
+            int ver = DATABASE_VERSION;
         }
 
         @Override
@@ -172,8 +249,8 @@ public class HTVTDB {
         @Override
         public void onOpen(SQLiteDatabase sqLiteDatabase) {
             super.onOpen(sqLiteDatabase);
-            if(!db.isReadOnly()) {
-                db.execSQL("PRAGMA foreign_keys=ON;");
+            if(!sqLiteDatabase.isReadOnly()) {
+                sqLiteDatabase.execSQL("PRAGMA foreign_keys=ON;");
             }
         }
 

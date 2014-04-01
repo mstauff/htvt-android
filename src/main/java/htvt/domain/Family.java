@@ -7,8 +7,8 @@ public class Family extends FamilyBaseRecord {
     public Family() { }
 
     public Family(Long HeadOfHouseId, Long SpouseId, String formattedCoupleName, String phone, String homeAddress, String email) {
-        this.setHeadOfHouseId(HeadOfHouseId);
-        this.setSpouseId(SpouseId);
+        this.setFatherId(HeadOfHouseId);
+        this.setMotherId(SpouseId);
         this.setFormattedCoupleName(formattedCoupleName);
         this.setPhone(phone);
         this.setStreet(homeAddress);
@@ -26,6 +26,7 @@ public class Family extends FamilyBaseRecord {
     private List<Member> children = new ArrayList<Member>();
     public List<Member> getChildren() { return children; }
     public void setChildren(List<Member> children) { this.children = children; }
+    public void addChild(Member child) { children.add(child); }
 
     private Member headOfHouse = null;
     public Member getHeadOfHousehold() {

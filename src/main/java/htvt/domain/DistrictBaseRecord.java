@@ -5,7 +5,7 @@ import android.database.Cursor;
 
 public class DistrictBaseRecord implements BaseRecord {
     public static final String TABLE_NAME = "district";
-    public static final String DISTRICT_ID = "districtId";
+    public static final String DISTRICT_ID = "district_id";
     public static final String NAME = "name";
     public static final String AUXILIARY_ID = "auxiliary_id";
     public static final String DISTRICT_LEADER_ID = "district_leader_id";
@@ -19,7 +19,7 @@ public class DistrictBaseRecord implements BaseRecord {
             + DISTRICT_ID + " INTEGER PRIMARY KEY, "
             + NAME + " STRING, "
             + AUXILIARY_ID + " INTEGER, "
-            + DISTRICT_LEADER_ID + " INTEGER"
+            + DISTRICT_LEADER_ID + " INTEGER, "
             + "FOREIGN KEY(" + AUXILIARY_ID + ") REFERENCES "
             + AuxiliaryBaseRecord.TABLE_NAME + "(" + AuxiliaryBaseRecord.AUXILIARY_ID + ") ON DELETE CASCADE"
             + ");";

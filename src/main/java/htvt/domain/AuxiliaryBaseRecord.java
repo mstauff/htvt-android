@@ -13,7 +13,7 @@ public class AuxiliaryBaseRecord implements BaseRecord {
     private long unitId = 0;
     private String auxiliaryType = "";
 
-    public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS" + TABLE_NAME + " ("
+    public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
             + AUXILIARY_ID + " INTEGER PRIMARY KEY, "
             + UNIT_ID + " INTEGER, "
             + AUXILIARY_TYPE + " TEXT"

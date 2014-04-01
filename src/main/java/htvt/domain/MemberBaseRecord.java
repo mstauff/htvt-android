@@ -15,8 +15,10 @@ public class MemberBaseRecord implements BaseRecord {
     public static final String EMAIL = "email";
     public static final String GENDER = "gender";
     public static final String PHOTO_URL = "photo_url";
+    public static final String IMAGE_ID = "image_id";
     public static final String PHONE = "phone";
     public static final String ISADULT = "is_adult";
+    public static final String NOTES = "notes";
 
     private long id = 0;
     private long individualId = 0;
@@ -27,8 +29,10 @@ public class MemberBaseRecord implements BaseRecord {
     private String email = "";
     private String gender = "";
     private String photoUrl = "";
+    private String imageId = "";
     private String phone = "";
     private long isAdult = 0;
+    private String notes = "";
 
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
             + ID + " INTEGER PRIMARY KEY, "
@@ -40,12 +44,14 @@ public class MemberBaseRecord implements BaseRecord {
             + EMAIL + " TEXT, "
             + GENDER + " TEXT, "
             + PHOTO_URL + " TEXT, "
+            + IMAGE_ID + " TEXT, "
             + PHONE + " TEXT, "
-            + ISADULT + " INTEGER"
+            + ISADULT + " INTEGER, "
+            + NOTES + " TEXT"
             + ");";
 
     static final String[] ALL_KEYS = new String[] { ID, INDIVIDUAL_ID, FORMATTED_NAME, FIRST_NAME, LAST_NAME,
-            PRIESTHOOD_OFFICE, EMAIL, GENDER, PHOTO_URL, PHONE, ISADULT };
+            PRIESTHOOD_OFFICE, EMAIL, GENDER, PHOTO_URL, IMAGE_ID, PHONE, ISADULT, NOTES };
 
     public String[] getAllKeys() {
         return ALL_KEYS.clone();
@@ -62,8 +68,10 @@ public class MemberBaseRecord implements BaseRecord {
         values.put(EMAIL, email);
         values.put(GENDER, gender);
         values.put(PHOTO_URL, photoUrl);
+        values.put(IMAGE_ID, imageId);
         values.put(PHONE, phone);
         values.put(ISADULT, isAdult);
+        values.put(NOTES, notes);
         return values;
     }
 
@@ -77,8 +85,10 @@ public class MemberBaseRecord implements BaseRecord {
         email = values.getAsString(EMAIL);
         gender = values.getAsString(GENDER);
         photoUrl = values.getAsString(PHOTO_URL);
+        imageId = values.getAsString(IMAGE_ID);
         phone = values.getAsString(PHONE);
         isAdult = values.getAsLong(ISADULT);
+        notes = values.getAsString(NOTES);
     }
 
     public void setContent(Cursor cursor) {
@@ -91,8 +101,10 @@ public class MemberBaseRecord implements BaseRecord {
         email = cursor.getString(cursor.getColumnIndex(EMAIL));
         gender = cursor.getString(cursor.getColumnIndex(GENDER));
         photoUrl = cursor.getString(cursor.getColumnIndex(PHOTO_URL));
+        imageId = cursor.getString(cursor.getColumnIndex(IMAGE_ID));
         phone = cursor.getString(cursor.getColumnIndex(PHONE));
         isAdult = cursor.getLong(cursor.getColumnIndex(ISADULT));
+        notes = cursor.getString(cursor.getColumnIndex(NOTES));
     }
 
     public long getId() { return id; }
@@ -154,6 +166,13 @@ public class MemberBaseRecord implements BaseRecord {
         this.photoUrl = photoUrl;
     }
 
+    public String getImageId() {
+        return imageId;
+    }
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -166,5 +185,12 @@ public class MemberBaseRecord implements BaseRecord {
     }
     public void setIsAdult(long isAdult) {
         this.isAdult = isAdult;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
