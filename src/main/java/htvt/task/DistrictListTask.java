@@ -3,14 +3,13 @@ package htvt.task;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import htvt.InternalIntents;
-import htvt.api.MemberManager;
+import htvt.api.DistrictManager;
 import htvt.api.ServiceException;
-import htvt.domain.Family;
+import htvt.domain.District;
 import htvt.domain.HTVTDB;
 import htvt.domain.Member;
 import main.java.htvt.R;
@@ -19,26 +18,25 @@ import roboguice.util.RoboAsyncTask;
 import javax.inject.Inject;
 import java.util.List;
 
-public class WardListTask  extends RoboAsyncTask<Void> {
-    @Inject
-    private SharedPreferences preferences;
+public class DistrictListTask extends RoboAsyncTask<Void> {
 
     @Inject
-    private MemberManager memberManager;
+    private DistrictManager districtManager;
 
     @Inject
     private HTVTDB db;
+
     protected ProgressDialog progressDialog;
-
     boolean forceUpdate;
-
     private ServiceException.ServiceError serviceError = ServiceException.ServiceError.NONE;
     private Handler handler;
+    private long auxiliaryId;
 
-    public  WardListTask(Context context, boolean forceUpdate, ProgressDialog progressDialog) {
+    public  DistrictListTask(Context context, boolean forceUpdate, ProgressDialog progressDialog, long auxiliaryId) {
         super(context);
         this.forceUpdate = forceUpdate;
         this.progressDialog = progressDialog;
+        this.auxiliaryId = auxiliaryId;
     }
 
     @Override
@@ -76,9 +74,9 @@ public class WardListTask  extends RoboAsyncTask<Void> {
     public Void call() throws Exception {
         boolean dataUpdated = false;
         if(forceUpdate || !db.hasData(Member.TABLE_NAME)) {
-            List<Family> families = memberManager.getWardList();
-            if( !families.isEmpty() ) {
-                //db.updateWardList(families);
+            List<District> districts = districtManager.getDistricts(auxiliaryId);
+            if( !districts.isEmpty() ) {
+                db.updateDistricts(districts);
                 dataUpdated = true;
             }
         }

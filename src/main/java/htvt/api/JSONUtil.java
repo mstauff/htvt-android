@@ -1,8 +1,6 @@
 package htvt.api;
 
-import htvt.domain.Family;
-import htvt.domain.Member;
-import htvt.domain.NetworkConfiguration;
+import htvt.domain.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,9 +100,9 @@ public class JSONUtil {
     }
 
     public static List<Family> parseMemberList(JSONArray jsonArray) throws JSONException {
-        List<Family> memberList = new ArrayList<Family>(jsonArray.length());
-        final int numJsonObjects = jsonArray.length();
-        for (int i = 0; i < numJsonObjects; i++) {
+        final int jsonLength = jsonArray.length();
+        List<Family> memberList = new ArrayList<Family>(jsonLength);
+        for (int i = 0; i < jsonLength; i++) {
             memberList.add(parseFamily(jsonArray.getJSONObject(i)));
         }
 
@@ -118,5 +116,84 @@ public class JSONUtil {
                 json.getString("district_create"), json.getString("district_update"), json.getString("district_delete"),
                 json.getString("comp_create"), json.getString("comp_delete"), json.getString("visit_record"),
                 json.getString("visit_delete"), json.getString("latest_visits"));
+    }
+
+    public static List<District> parseDistricts(JSONArray jsonArray) throws JSONException {
+        final int jsonLength = jsonArray.length();
+        List<District> districts = new ArrayList<District>(jsonLength);
+        for (int i = 0; i < jsonLength; i++) {
+            districts.add(parseDistrict(jsonArray.getJSONObject(i)));
+        }
+        return districts;
+    }
+    public static District parseDistrict(JSONObject json) throws JSONException {
+        District district = new District(json.getLong("auxiliaryId"),json.getLong("id"), json.getString("name"), json.getLong("districtLeaderId"));
+        if(json.has("companionships") && !json.isNull("companionships")) {
+            district.setCompanionships(parseCompanionships(json.getJSONArray("companionships")));
+        }
+        return district;
+    }
+
+    public static List<Companionship> parseCompanionships(JSONArray json) throws JSONException {
+        final int jsonLength = json.length();
+        List<Companionship> companionships = new ArrayList<Companionship>(jsonLength);
+        for(int i = 0; i < jsonLength; i++) {
+            companionships.add(parseCompanionship(json.getJSONObject(i)));
+        }
+        return companionships;
+    }
+
+    public static Companionship parseCompanionship(JSONObject json) throws JSONException {
+        Companionship companionship = new Companionship(json.getLong("id"), json.getLong("districtId"));
+        if(json.has("assignments") && !json.isNull("assignments")) {
+            companionship.setAssignments(parseAssignments(json.getJSONArray("assignments")));
+        }
+        if(json.has("teachers") && !json.isNull("teachers")) {
+            companionship.setTeachers(parseTeachers(json.getJSONArray("teachers")));
+        }
+        return companionship;
+    }
+
+    public static List<Assignment> parseAssignments(JSONArray json) throws JSONException {
+        final int jsonLength = json.length();
+        List<Assignment> assignments = new ArrayList<Assignment>(jsonLength);
+        for(int i = 0; i < jsonLength; i++) {
+            assignments.add(parseAssignment(json.getJSONObject(i)));
+        }
+        return assignments;
+    }
+
+    public static Assignment parseAssignment(JSONObject json) throws JSONException {
+        Assignment assignment = new Assignment(json.getLong("companionshipId"), json.getLong("id"), json.getLong("individualId"));
+        if(json.has("visits") && !json.isNull("visits")) {
+            assignment.setVisits(parseVisits(json.getJSONArray("visits")));
+        }
+        return assignment;
+    }
+
+    public static List<Visit> parseVisits(JSONArray json) throws JSONException {
+        final int jsonLength = json.length();
+        List<Visit> visits = new ArrayList<Visit>(jsonLength);
+        for(int i = 0; i < jsonLength; i++) {
+            visits.add(parseVisit(json.getJSONObject(i)));
+        }
+        return visits;
+    }
+
+    public static Visit parseVisit(JSONObject json) throws JSONException {
+        return new Visit(json.getLong("assignmentId"), json.isNull("id") ? null : json.getLong("id"), json.isNull("visited") ? null : json.getBoolean("visited"), json.getLong("year"), json.getLong("month"));
+    }
+
+    public static List<Teacher> parseTeachers(JSONArray json) throws JSONException {
+        final int jsonLength = json.length();
+        List<Teacher> teachers = new ArrayList<Teacher>(jsonLength);
+        for(int i = 0; i < jsonLength; i++) {
+            teachers.add(parseTeacher(json.getJSONObject(i)));
+        }
+        return teachers;
+    }
+
+    public static Teacher parseTeacher(JSONObject json) throws JSONException {
+        return new Teacher(json.getLong("companionshipId"), json.getLong("id"), json.getLong("individualId"));
     }
 }

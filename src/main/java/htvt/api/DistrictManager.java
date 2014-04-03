@@ -1,6 +1,6 @@
 package htvt.api;
 
-import htvt.domain.Family;
+import htvt.domain.District;
 import htvt.domain.NetworkConfiguration;
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
@@ -13,22 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class MemberManager {
-
+public class DistrictManager {
     @Inject
     HTVTNetworkUtil networkUtil;
 
-    public List<Family> getWardList() {
-        List<Family> wardList = new ArrayList<Family>();
+    public List<District> getDistricts(long auxiliaryId) {
+        List<District> districts = new ArrayList<District>();
         try {
-            String memberList = networkUtil.executeGetJSONRequest(
-                    new HttpGet(networkUtil.getNetworkConfiguration().urlsMap.get(NetworkConfiguration.MEMBER_LIST).replace("%", "")));
-            wardList = JSONUtil.parseMemberList(new JSONArray(memberList));
+            String districtList = networkUtil.executeGetJSONRequest(
+                    new HttpGet(networkUtil.getNetworkConfiguration().urlsMap.get(NetworkConfiguration.HTVT_DISTRICTS).replace("%", "")));
+            districts = JSONUtil.parseDistricts(new JSONArray(districtList));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (JSONException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return wardList;
+        return districts;
     }
 }

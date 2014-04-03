@@ -11,11 +11,11 @@ public class VisitBaseRecord implements BaseRecord {
     public static final String YEAR = "year";
     public static final String MONTH = "month";
 
-    private long visitId = 0;
-    private long assignmentId = 0;
-    private long visited = 0;
-    private long year = 0;
-    private long month = 0;
+    private Long visitId;
+    private Long assignmentId = 0L;
+    private Long visited;
+    private Long year = 0L;
+    private Long month = 0L;
 
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
             + VISIT_ID + " INTEGER PRIMARY KEY, "
@@ -59,18 +59,18 @@ public class VisitBaseRecord implements BaseRecord {
         month = cursor.getLong(cursor.getColumnIndex(MONTH));
     }
 
-    public long getVisitId() { return visitId; }
-    public void setVisitId(long visitId) { this.visitId = visitId; }
+    public Long getVisitId() { return visitId; }
+    public void setVisitId(Long visitId) { this.visitId = visitId; }
 
-    public long getAssignmentId() { return assignmentId; }
-    public void setAssignmentId(long assignmentId) { this.assignmentId = assignmentId; }
+    public Long getAssignmentId() { return assignmentId; }
+    public void setAssignmentId(Long assignmentId) { this.assignmentId = assignmentId; }
 
-    public long getVisited() { return visited; }
-    public void setVisited(long visited) { this.visited = visited; }
+    public Long getVisited() { return visited; }
+    public void setVisited(Long visited) { this.visited = visited; }
 
-    public long getYear() { return year; }
-    public void setYear(long year) { this.year = year; }
+    public Long getYear() { return year; }
+    public void setYear(Long year) { this.year = year; }
 
-    public long getMonth() { return month; }
-    public void setMonth(long month) { this.month = month; }
+    public Long getMonth() { return month; }
+    public void setMonth(Long month) { this.month = month; }
 }

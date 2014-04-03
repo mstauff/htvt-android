@@ -111,7 +111,11 @@ public class HTVTDB {
         return new ArrayList<Auxiliary>();
     }
 
-    public void updateDistricts(List<Auxiliary> auxiliaries) {
+    public void updateAuxiliaries(List<Auxiliary> auxiliaries) {
+
+    }
+
+    public void updateDistricts(List<District> districts) {
 
     }
 

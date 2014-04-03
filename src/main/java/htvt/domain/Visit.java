@@ -7,26 +7,27 @@ public class Visit extends VisitBaseRecord {
 
     }
 
-    public Visit(long assignmentId, long visitId, boolean visited, long year, long month) {
+    public Visit(Long assignmentId, Long visitId, Boolean visited, Long year, Long month) {
         this.setAssignmentId(assignmentId);
         this.setVisitId(visitId);
-        if(visited) {
-            this.setVisited(1);
+        if(visited == null) {
+        } else if(visited) {
+            this.setVisited(1L);
         } else {
-            this.setVisited(0);
+            this.setVisited(0L);
         }
         this.setYear(year);
         this.setMonth(month);
     }
 
-    public Visit(Assignment assignment, long visitId, boolean visited, long year, long month) {
+    public Visit(Assignment assignment, Long visitId, Boolean visited, Long year, Long month) {
         this.assignment = assignment;
         this.setAssignmentId(assignment.getAssignmentId());
         this.setVisitId(visitId);
         if(visited) {
-            this.setVisited(1);
+            this.setVisited(1L);
         } else {
-            this.setVisited(0);
+            this.setVisited(0L);
         }
         this.setYear(year);
         this.setMonth(month);

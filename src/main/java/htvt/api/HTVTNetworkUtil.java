@@ -29,8 +29,8 @@ import java.io.InputStreamReader;
  * Provides utility methods for communicating with the server.
  */
 @Singleton
-public class CwfNetworkUtil {
-    private static final String TAG = TagUtil.createTag("lds-cwf", CwfNetworkUtil.class);
+public class HTVTNetworkUtil {
+    private static final String TAG = TagUtil.createTag("lds-cwf", HTVTNetworkUtil.class);
 
     //private static HttpClient httpClient;
     private static AbstractHttpClient httpClient;
@@ -52,7 +52,7 @@ public class CwfNetworkUtil {
     public static final String visit_delete = ROOT + "/%@/visits/%@";
     public static final String latest_visits = ROOT + "/%@/visits/latestByOrganization/%@/";
 
-    public CwfNetworkUtil() {
+    public HTVTNetworkUtil() {
     }
 
     /**
