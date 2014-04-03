@@ -78,7 +78,7 @@ public class WardListTask  extends RoboAsyncTask<Void> {
         if(forceUpdate || !db.hasData(Member.TABLE_NAME)) {
             List<Family> families = memberManager.getWardList();
             if( !families.isEmpty() ) {
-                //db.updateWardList(families);
+                db.updateWardList(families);
                 dataUpdated = true;
             }
         }
