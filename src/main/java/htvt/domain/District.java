@@ -1,10 +1,11 @@
 package htvt.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class District extends DistrictBaseRecord implements Listable {
     private Auxiliary auxiliary;
-    private List<Companionship> companionships;
+    private List<Companionship> companionships = new ArrayList<Companionship>();
 
     public District() {
 

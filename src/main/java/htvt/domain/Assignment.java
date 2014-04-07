@@ -1,10 +1,11 @@
 package htvt.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Assignment extends AssignmentBaseRecord implements Listable {
     private Companionship companionship;
-    private List<Visit> visits;
+    private List<Visit> visits = new ArrayList<Visit>();
 
     public Assignment() {
 
@@ -45,6 +46,8 @@ public class Assignment extends AssignmentBaseRecord implements Listable {
     public void setVisits(List<Visit> visits) {
         this.visits = visits;
     }
+
+    public void addVisit(Visit visit) { visits.add(visit); }
 
     public String getDisplayString() {
         return "";

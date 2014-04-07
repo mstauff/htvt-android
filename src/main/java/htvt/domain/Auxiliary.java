@@ -1,9 +1,10 @@
 package htvt.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Auxiliary extends AuxiliaryBaseRecord {
-    private List<District> districts;
+    private List<District> districts = new ArrayList<District>();
     public Auxiliary() {
 
     }

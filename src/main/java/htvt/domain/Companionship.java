@@ -1,11 +1,12 @@
 package htvt.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Companionship extends CompanionshipBaseRecord {
     private District district;
-    private List<Teacher> teachers;
-    private List<Assignment> assignments;
+    private List<Teacher> teachers = new ArrayList<Teacher>();
+    private List<Assignment> assignments = new ArrayList<Assignment>();
 
     public Companionship() {
 

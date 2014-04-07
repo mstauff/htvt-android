@@ -107,16 +107,99 @@ public class HTVTDB {
     }
 
     // Districts
-    public List<Auxiliary> getAssignmentInfo() {
-        return new ArrayList<Auxiliary>();
-    }
+    public List<District> getDistricts() {
+        List<Auxiliary> auxiliaries = getData(Auxiliary.TABLE_NAME, Auxiliary.class);
+        Map<Long, Auxiliary> auxiliaryMap = new HashMap<Long, Auxiliary>(auxiliaries.size());
+        for(Auxiliary auxiliary: auxiliaries) {
+            auxiliaryMap.put(auxiliary.getAuxiliaryId(), auxiliary);
+        }
 
-    public void updateAuxiliaries(List<Auxiliary> auxiliaries) {
+        List<District> districts = getData(District.TABLE_NAME, District.class);
+        Map<Long, District> districtMap = new HashMap<Long, District>(districts.size());
+        for(District district: districts) {
+            Auxiliary auxiliary = auxiliaryMap.get(district.getAuxiliaryId());
+            auxiliary.addDistrict(district);
+            district.setAuxiliary(auxiliary);
+            districtMap.put(district.getDistrictId(), district);
+        }
 
+        List<Companionship> companionships = getData(Companionship.TABLE_NAME, Companionship.class);
+        Map<Long, Companionship> companionshipMap = new HashMap<Long, Companionship>(companionships.size());
+        for(Companionship companionship: companionships) {
+            District district = districtMap.get(companionship.getDistrictId());
+            district.addCompanionship(companionship);
+            companionship.setDistrict(district);
+            companionshipMap.put(companionship.getCompanionshipId(), companionship);
+        }
+
+        List<Teacher> teachers = getData(Teacher.TABLE_NAME, Teacher.class);
+        for(Teacher teacher: teachers) {
+            Companionship companionship = companionshipMap.get(teacher.getCompanionshipId());
+            companionship.addTeacher(teacher);
+            teacher.setCompanionship(companionship);
+        }
+
+        List<Assignment> assignments = getData(Assignment.TABLE_NAME, Assignment.class);
+        Map<Long, Assignment> assignmentMap = new HashMap<Long, Assignment>(assignments.size());
+        for(Assignment assignment: assignments) {
+            Companionship companionship = companionshipMap.get(assignment.getCompanionshipId());
+            companionship.addAssignment(assignment);
+            assignment.setCompanionship(companionship);
+            assignmentMap.put(assignment.getAssignmentId(), assignment);
+        }
+
+        List<Visit> visits = getData(Visit.TABLE_NAME, Visit.class);
+        for(Visit visit: visits) {
+            Assignment assignment = assignmentMap.get(visit.getAssignmentId());
+            assignment.addVisit(visit);
+            visit.setAssignment(assignment);
+        }
+
+        return districts;
     }
 
     public void updateDistricts(List<District> districts) {
-
+        List<Auxiliary> auxiliaries = new ArrayList<Auxiliary>();
+        Map<Long, Auxiliary> auxiliaryMap = new HashMap<Long, Auxiliary>();
+        List<Companionship> companionships = new ArrayList<Companionship>();
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        List<Assignment> assignments = new ArrayList<Assignment>();
+        List<Visit> visits = new ArrayList<Visit>();
+        long visitsIdCounter = -1;
+        for(District district: districts) {
+            Auxiliary auxiliary = auxiliaryMap.get(district.getAuxiliaryId());
+            if(auxiliary == null){
+                //todo: add unitId and auxiliary type to auxiliary
+                auxiliary = new Auxiliary(district.getAuxiliaryId(), 0, null);
+                auxiliaries.add(auxiliary);
+                auxiliaryMap.put(auxiliary.getAuxiliaryId(), auxiliary);
+            }
+            for(Companionship companionship: district.getCompanionships()) {
+                companionship.setDistrictId(district.getDistrictId());
+                companionships.add(companionship);
+                for(Teacher teacher: companionship.getTeachers()) {
+                    teacher.setCompanionshipId(companionship.getCompanionshipId());
+                    teachers.add(teacher);
+                }
+                for(Assignment assignment: companionship.getAssignments()) {
+                    assignment.setCompanionshipId(companionship.getCompanionshipId());
+                    assignments.add(assignment);
+                    for(Visit visit: assignment.getVisits()) {
+                        if(visit.getVisitId() == null) {
+                            visit.setVisitId(visitsIdCounter--);
+                        }
+                        visit.setAssignmentId(assignment.getAssignmentId());
+                        visits.add(visit);
+                    }
+                }
+            }
+        }
+        updateData(Auxiliary.TABLE_NAME, auxiliaries);
+        updateData(District.TABLE_NAME, districts);
+        updateData(Companionship.TABLE_NAME, companionships);
+        updateData(Teacher.TABLE_NAME, teachers);
+        updateData(Assignment.TABLE_NAME, assignments);
+        updateData(Visit.TABLE_NAME, visits);
     }
 
     // generic/helper methods
@@ -232,6 +315,7 @@ public class HTVTDB {
             db.execSQL( AuxiliaryBaseRecord.CREATE_SQL );
             db.execSQL( DistrictBaseRecord.CREATE_SQL );
             db.execSQL( CompanionshipBaseRecord.CREATE_SQL );
+            db.execSQL( TeacherBaseRecord.CREATE_SQL );
             db.execSQL( AssignmentBaseRecord.CREATE_SQL );
             db.execSQL( VisitBaseRecord.CREATE_SQL );
             db.execSQL( TagBaseRecord.CREATE_SQL );
