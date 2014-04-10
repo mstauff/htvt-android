@@ -30,7 +30,7 @@ import java.io.InputStreamReader;
  */
 @Singleton
 public class HTVTNetworkUtil {
-    private static final String TAG = TagUtil.createTag("lds-cwf", HTVTNetworkUtil.class);
+    private static final String TAG = TagUtil.createTag("HTVT Network", HTVTNetworkUtil.class);
 
     //private static HttpClient httpClient;
     private static AbstractHttpClient httpClient;
@@ -114,7 +114,7 @@ public class HTVTNetworkUtil {
         return builder.toString();
     }
 
-    private String executeDeleteJSONRequest(HttpDelete deleteMethod) throws IOException {
+    public String executeDeleteJSONRequest(HttpDelete deleteMethod) throws IOException {
         Log.i(TAG, "executeDeleteJSONRequest() putting to: " + deleteMethod.getURI().toString());
         StringBuilder builder = new StringBuilder();
         HttpResponse response = getHttpClient().execute(deleteMethod);
