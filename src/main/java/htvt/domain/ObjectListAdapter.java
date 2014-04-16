@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
-import htvt.domain.Listable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,17 @@ public class ObjectListAdapter extends ArrayAdapter<Listable> {
     List<Listable> displayedItems;
     LayoutInflater inflater;
 
-    public ObjectListAdapter(Context context,int textViewResourceId,List<? extends Listable> list){
+    public ObjectListAdapter(Activity activity, int textViewResourceId,List<? extends Listable> list){
+        super(activity.getApplicationContext(),textViewResourceId);
+        super.addAll(list);
+        this.context = activity.getApplicationContext();
+        this.textViewId = textViewResourceId;
+        this.items = list.toArray();
+        displayedItems = new ArrayList<Listable>(list);
+        this.inflater = activity.getLayoutInflater();
+    }
+
+    public ObjectListAdapter(Context context, int textViewResourceId,List<? extends Listable> list){
         super(context,textViewResourceId);
         super.addAll(list);
         this.context = context;
@@ -30,7 +39,7 @@ public class ObjectListAdapter extends ArrayAdapter<Listable> {
         this.inflater = ((Activity)context).getLayoutInflater();
     }
 
-    public ObjectListAdapter(Context context,int textViewResourceId,Listable[] list){
+    public ObjectListAdapter(Context context, int textViewResourceId,Listable[] list){
         super(context,textViewResourceId,list);
         this.context = context;
         this.textViewId = textViewResourceId;

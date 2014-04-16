@@ -11,4 +11,5 @@
     </string-array>
     <string name="pref_sync_all_progress_success">Unit data updated</string>
     <string name="pref_sync_all_progress_failure">Unable to update data. Please try syncing again later</string>
+    <string name="individualListId">Individual List</string>
 </resources>

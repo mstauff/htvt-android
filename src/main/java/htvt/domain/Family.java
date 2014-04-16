@@ -3,7 +3,7 @@ package htvt.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Family extends FamilyBaseRecord {
+public class Family extends FamilyBaseRecord implements Listable {
     public Family() { }
 
     public Family(Long HeadOfHouseId, Long SpouseId, String formattedCoupleName, String phone, String homeAddress, String email) {
@@ -45,5 +45,10 @@ public class Family extends FamilyBaseRecord {
             }
         }
         return headOfHouse;
+    }
+
+    @Override
+    public String getDisplayString() {
+        return getFormattedCoupleName();
     }
 }

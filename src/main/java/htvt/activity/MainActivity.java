@@ -1,24 +1,27 @@
 package htvt.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 import htvt.api.MemberManager;
 import main.java.htvt.R;
 import org.lds.mobile.util.TagUtil;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboFragmentActivity;
+import roboguice.fragment.RoboFragment;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends RoboActivity {
+@ContentView(R.layout.main)
+public class MainActivity extends RoboFragmentActivity {
     public static final String DEFAULT_TAG_PREFIX = "workflow.";
 
     public static String createTag(Class clazz) {
@@ -58,8 +61,6 @@ public class MainActivity extends RoboActivity {
                 setPageActivity(position);
             }
         });
-
-        BuildMemberListWithOptions();
     }
 
     @Override
@@ -70,10 +71,13 @@ public class MainActivity extends RoboActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setPageActivity(int position){
+    @InjectView(R.id.page_frame)
+        FrameLayout frameLayout;
+
+    private void setPageActivity(int position) {
         pageFrame.removeAllViews();
 
-        Fragment fragment;
+        RoboFragment fragment;
         switch (position){
             case 0:
             default:
@@ -89,56 +93,10 @@ public class MainActivity extends RoboActivity {
                 fragment = new ReportFragment();
                 break;
         }
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.page_frame, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(frameLayout.getId(), fragment).commit();
 
         navList.setItemChecked(position, true);
         setTitle(navOptions[position]);
         drawerNav.closeDrawer(navList);
-    }
-
-    public HashMap<Long, String> HydrateMemberList() {
-        members.put(100L,"Brian Blanchard");
-        members.put(101L, "Alex Carrasco");
-        members.put(102L, "Adam Shephard");
-        members.put(103L, "Matthew Stauffer");
-        members.put(104L, "William Wilcox");
-        members.put(105L, "Vard Lott");
-        members.put(106L, "Drew Terry");
-        members.put(107L, "Jeff Nelson");
-        return members;
-    }
-
-    public void BuildMemberListWithOptions() {
-        HydrateMemberList();
-        TableLayout l_layout = (TableLayout) findViewById(R.id.mainTableLayout);
-        String[] spinnerOption = {"Not Recorded", "Yes", "No"};
-        for(Map.Entry<Long, String> val : members.entrySet()) {
-            TableRow tableRow = new TableRow(this);
-            tableRow.setLeft(5);
-            Spinner yesNo = new Spinner(this);
-            yesNo.setId(Integer.valueOf(val.getKey().toString()));
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerOption);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-            yesNo.setAdapter(spinnerArrayAdapter);
-            TextView label = new TextView(this);
-            label.setText(val.getValue());
-            tableRow.addView(label);
-            tableRow.addView(yesNo);
-            l_layout.addView(tableRow);
-        }
-        //yesNo.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
-    }
-
-    public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            // An item was selected. You can retrieve the selected item using
-            // parent.getItemAtPosition(pos)
-        }
-
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Another interface callback
-        }
     }
 }
