@@ -2,6 +2,7 @@ package htvt.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +85,7 @@ public class MainActivity extends RoboFragmentActivity {
                 fragment = new IndividualListFragment();
                 break;
             case 1:
-                fragment = new AssignFragment();
+                fragment = new DistrictListFragment();
                 break;
             case 2:
                 fragment = new RecordFragment();

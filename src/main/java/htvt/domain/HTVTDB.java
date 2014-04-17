@@ -108,6 +108,50 @@ public class HTVTDB {
 
     // Districts
     public List<District> getDistricts() {
+        //get member data for display strings
+        boolean homeTeaching = true; //todo: set boolean according to current auxiliary
+        Map<Long, String> memberNames = new HashMap<Long, String>();
+        Map<Long, Long> memberIdLookup = new HashMap<Long, Long>();
+        Map<Long, String> familyNames = new HashMap<Long, String>();
+        Cursor nameResults = null;
+        try {
+            SQLiteDatabase db = dbHelper.getDb();
+            nameResults = db.query(Member.TABLE_NAME, new String[]{Member.ID, Member.INDIVIDUAL_ID, Member.FORMATTED_NAME}, null, null, null, null, null);
+            nameResults.moveToFirst();
+            while(!nameResults.isAfterLast()) {
+                Long individualId = nameResults.getLong(nameResults.getColumnIndex(Member.INDIVIDUAL_ID));
+                String memberName = nameResults.getString(nameResults.getColumnIndex(Member.FORMATTED_NAME));
+                memberNames.put(individualId, memberName);
+                if(homeTeaching){
+                    Long memberId = nameResults.getLong(nameResults.getColumnIndex(Member.ID));
+                    memberIdLookup.put(individualId, memberId);
+                }
+                nameResults.moveToNext();
+            }
+
+            if(homeTeaching) {
+                closeCursor(nameResults);
+                nameResults = db.query(Family.TABLE_NAME, new String[]{Family.FATHER_ID, Family.MOTHER_ID, Family.FORMATTED_COUPLE_NAME}, null, null, null, null, null);
+                nameResults.moveToFirst();
+                while(!nameResults.isAfterLast()) {
+                    Long fatherId = nameResults.getLong(nameResults.getColumnIndex(Family.FATHER_ID));
+                    Long motherId = nameResults.getLong(nameResults.getColumnIndex(Family.MOTHER_ID));
+                    String familyName = nameResults.getString(nameResults.getColumnIndex(Family.FORMATTED_COUPLE_NAME));
+                    if(fatherId != null && fatherId > 0){
+                        familyNames.put(fatherId, familyName);
+                    }
+                    if(motherId != null && motherId > 0) {
+                        familyNames.put(motherId, familyName);
+                    }
+                    nameResults.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "getDistricts() Exception: " + e.toString());
+        } finally {
+            closeCursor( nameResults );
+        }
+
         List<Auxiliary> auxiliaries = getData(Auxiliary.TABLE_NAME, Auxiliary.class);
         Map<Long, Auxiliary> auxiliaryMap = new HashMap<Long, Auxiliary>(auxiliaries.size());
         for(Auxiliary auxiliary: auxiliaries) {
@@ -137,6 +181,10 @@ public class HTVTDB {
             Companionship companionship = companionshipMap.get(teacher.getCompanionshipId());
             companionship.addTeacher(teacher);
             teacher.setCompanionship(companionship);
+            String teacherName = memberNames.get(teacher.getIndividualId());
+            if(teacherName != null) {
+                teacher.setDisplayString(teacherName);
+            }
         }
 
         List<Assignment> assignments = getData(Assignment.TABLE_NAME, Assignment.class);
@@ -146,6 +194,17 @@ public class HTVTDB {
             companionship.addAssignment(assignment);
             assignment.setCompanionship(companionship);
             assignmentMap.put(assignment.getAssignmentId(), assignment);
+            if(homeTeaching) {
+                String familyName = familyNames.get(memberIdLookup.get(assignment.getIndividualId()));
+                if(familyName != null) {
+                    assignment.setDisplayString(familyName);
+                }
+            } else {
+                String assigmentName = memberNames.get(assignment.getIndividualId());
+                if(assigmentName != null) {
+                    assignment.setDisplayString(assigmentName);
+                }
+            }
         }
 
         List<Visit> visits = getData(Visit.TABLE_NAME, Visit.class);

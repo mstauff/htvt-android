@@ -3,7 +3,7 @@ package htvt.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Companionship extends CompanionshipBaseRecord {
+public class Companionship extends CompanionshipBaseRecord implements Listable {
     private District district;
     private List<Teacher> teachers = new ArrayList<Teacher>();
     private List<Assignment> assignments = new ArrayList<Assignment>();
@@ -53,5 +53,16 @@ public class Companionship extends CompanionshipBaseRecord {
 
     public void addAssignment(Assignment assignment) {
         assignments.add(assignment);
+    }
+
+    public String getDisplayString() {
+        String result = "";
+        if(teachers.size() > 0) {
+            for(Teacher teacher: teachers) {
+                result = result + teacher.getDisplayString() + " / ";
+            }
+            result = result.substring(0, result.length()-3); //remove the hanging slash
+        }
+        return result;
     }
 }

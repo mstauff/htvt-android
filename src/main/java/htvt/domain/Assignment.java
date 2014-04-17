@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Assignment extends AssignmentBaseRecord implements Listable {
     private Companionship companionship;
+    private String displayString = "";
     private List<Visit> visits = new ArrayList<Visit>();
 
     public Assignment() {
@@ -50,6 +51,10 @@ public class Assignment extends AssignmentBaseRecord implements Listable {
     public void addVisit(Visit visit) { visits.add(visit); }
 
     public String getDisplayString() {
-        return "";
+        return displayString;
+    }
+
+    public void setDisplayString(String displayString) {
+        this.displayString = displayString;
     }
 }

@@ -2,6 +2,7 @@ package htvt.domain;
 
 public class Teacher extends TeacherBaseRecord implements Listable {
     private Companionship companionship;
+    private String displayString;
 
     public Teacher() {
 
@@ -36,6 +37,10 @@ public class Teacher extends TeacherBaseRecord implements Listable {
     }
 
     public String getDisplayString() {
-        return "";
+        return displayString;
+    }
+
+    public void setDisplayString(String displayString) {
+        this.displayString = displayString;
     }
 }
